@@ -1,0 +1,22 @@
+name: Build Dylib
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Theos
+        uses: pypush/actions-setup-theos@v1
+
+      - name: Build
+        run: make package FINALPACKAGE=1
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: MyModDylib
+          path: .theos/obj/debug/*.dylib
